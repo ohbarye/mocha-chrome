@@ -88,7 +88,12 @@ class MochaChrome {
 
   async connect () {
 
-    const instance = await createInstance(log, this.options);
+    let instance;
+    if (this.options.chromeHost && this.options.chromePort) {
+      instance = {port: this.options.chromePort, host: this.options.chromeHost, kill: () =>{}, process: ''}
+    } else {
+      instance = await createInstance(log, this.options);
+    }
     const client = await connectClient(instance, log, this.options);
     const { DOMStorage, Network, Runtime } = client;
 
